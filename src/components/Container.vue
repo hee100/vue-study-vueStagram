@@ -1,10 +1,6 @@
 <template>
 <div>
-  <!-- <div v-for="(data, i) in postdata" :key = i>
-    {{data}}
-  </div> -->
   <Post :data="data" v-for="(data,i) in postdata" :key="i"/>
-  <!-- <Post /> -->
 </div>
 </template>
 
