@@ -1,15 +1,16 @@
 <template>
 <div class="header">
     <ul class="header-button-left">
-      <li>Cancel</li>
+      <li @click="step=0">Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step==1" @click="step++">Next</li>
+      <li v-if="step==2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :url="url" :step="step" :postdata="postdata"/>
+  <Container @write="writeContent = $event" :url="url" :step="step" :postdata="postdata"/>
   <button @click="more">더보기</button>
 
 
@@ -34,10 +35,25 @@ export default {
       postdata : postdata,
       count : 0,
       step : 0,
-      url : ""
+      url : "" ,
+      writeContent : "" 
     }
   },
   methods : {
+    publish(){
+      var myPost = {
+      name: "홍길동",
+      userImage: "https://picsum.photos/100?random=3",
+      postImage: this.url,
+      likes: 36,
+      date: "May 15",
+      liked: false,
+      content: this.writeContent,
+      filter: "perpetua"
+    };
+      this.postdata.unshift(myPost);
+      this.step = 0;
+    },
     more() {
       axios.get(`https://codingapple1.github.io/vue/more${this.count}.json`)
       .then(result => {
@@ -48,8 +64,8 @@ export default {
     upload(e) {
       let file = e.target.files;
       console.log(file);
-      this.step++;
-      var url = URL.createObjectURL();
+      var url = URL.createObjectURL(file[0]);
+      this.url = url;
       console.log(url);
       this.step++;
     }
