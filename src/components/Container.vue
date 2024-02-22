@@ -1,21 +1,20 @@
 <template>
 <div>
   <div v-if="step == 0">
-    <Post :data="data" v-for="(data,i) in postdata" :key="i"/>
+    <Post :postNum="i" :data="data" v-for="(data,i) in postdata" :key="i"/>
   </div>
 
   <div v-if="step == 1">
-    <div class="upload-image" :style="`background-image:url(${url})`"></div>
+    <div :class="selectFilter" class="upload-image" :style="`background-image:url(${url})`"></div>
     <div class="filters">
       <FilterBox :url="url" :filter="filter" v-for="filter in filters" :key=filter>
-        <template v-slot:a>{{filter}}</template>
+        {{filter}}
       </FilterBox>
-
     </div>
   </div> 
 
   <div v-if="step == 2">
-    <div class="upload-image" :style="`background-image:url(${url})`"></div>
+    <div :class="selectFilter" class="upload-image" :style="`background-image:url(${url})`"></div>
     <div class="write">
       <textarea @input="$emit('write', $event.target.value)" class="write-box">write!</textarea> 
     </div>
@@ -33,8 +32,14 @@ export default {
     return {
       filters : [ "aden", "_1977", "brannan", "brooklyn", "clarendon", "earlybird", "gingham", "hudson", 
 "inkwell", "kelvin", "lark", "lofi", "maven", "mayfair", "moon", "nashville", "perpetua", 
-"reyes", "rise", "slumber", "stinson", "toaster", "valencia", "walden", "willow", "xpro2"]
+"reyes", "rise", "slumber", "stinson", "toaster", "valencia", "walden", "willow", "xpro2"],
+      selectFilter : ""
     }
+  },
+  mounted(){
+    this.emitter.on('clickBox', (a)=>{
+      this.selectFilter = a;
+    })
   },
   components: {
     Post: Post,

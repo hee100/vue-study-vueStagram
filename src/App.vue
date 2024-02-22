@@ -8,11 +8,13 @@
       <li v-if="step==2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
-  </div>
+</div>
 
+  <h4>ㅎㅇ {{$store.state.age}} {{$store.state.name}}</h4>
+  <button @click="$store.commit('upAge')">숫자</button>
+  <button @click="$store.commit('changeName')">버튼</button>
   <Container @write="writeContent = $event" :url="url" :step="step" :postdata="postdata"/>
   <button @click="more">더보기</button>
-
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -36,8 +38,15 @@ export default {
       count : 0,
       step : 0,
       url : "" ,
-      writeContent : "" 
+      writeContent : "" ,
+      selectFilter : ""
     }
+  },
+  mounted(){
+    this.emitter.on('clickBox', (a)=>{
+      console.log(a);
+      this.selectFilter = a;
+    });
   },
   methods : {
     publish(){
@@ -49,10 +58,11 @@ export default {
       date: "May 15",
       liked: false,
       content: this.writeContent,
-      filter: "perpetua"
+      filter: this.selectFilter
     };
+    console.log(myPost.filter)
       this.postdata.unshift(myPost);
-      this.step = 0;
+      this.step = 0; 
     },
     more() {
       axios.get(`https://codingapple1.github.io/vue/more${this.count}.json`)
