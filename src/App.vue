@@ -10,11 +10,14 @@
     <img src="./assets/logo.png" class="logo" />
 </div>
 
-  <h4>ㅎㅇ {{$store.state.age}} {{$store.state.name}}</h4>
-  <button @click="$store.commit('upAge')">숫자</button>
+  <h4>{{objectName}} {{$store.state.age}} {{$store.state.name}}</h4>
+  {{$store.state.more}}
+  <button @click="$store.dispatch('getData')">더보기</button>
+  <button @click="upAge">숫자</button>
   <button @click="$store.commit('changeName')">버튼</button>
   <Container @write="writeContent = $event" :url="url" :step="step" :postdata="postdata"/>
-  <button @click="more">더보기</button>
+  <!-- <button @click="more">더보기</button> -->
+
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -29,6 +32,7 @@
 import Container from './components/Container.vue'
 import postdata from './assets/postdata.js'
 import axios from 'axios'
+import { mapMutations, mapState } from 'vuex';
 axios;
 export default {
   name: "App",
@@ -39,7 +43,7 @@ export default {
       step : 0,
       url : "" ,
       writeContent : "" ,
-      selectFilter : ""
+      selectFilter : "",
     }
   },
   mounted(){
@@ -48,7 +52,15 @@ export default {
       this.selectFilter = a;
     });
   },
+  computed : {
+    name(){
+      return this.$store.state.name;
+    },
+    ...mapState(['name', 'age', 'likes']),
+    ...mapState({objectName : 'name'})
+  },
   methods : {
+    ...mapMutations(['setMore', 'upLikes', 'upAge']),
     publish(){
       var myPost = {
       name: "홍길동",
