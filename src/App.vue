@@ -40,7 +40,7 @@ export default {
     return {
       postdata : postdata,
       count : 0,
-      step : 0,
+      step : 3,
       url : "" ,
       writeContent : "" ,
       selectFilter : "",
